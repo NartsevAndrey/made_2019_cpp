@@ -30,14 +30,14 @@ struct Data1
 
 int main()
 {
-	Data x { 1, true, 2 };
+	Data x{ 1, true, 2 };
 
 	std::stringstream stream;
-    
+
 	Serializer serializer(stream);
 	serializer.save(x);
 
-	Data1 y { 0, false, 3};
+	Data1 y{ 0, false, 3 };
 
 	Deserializer deserializer(stream);
 	const Error err = deserializer.load(y);

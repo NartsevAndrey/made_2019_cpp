@@ -3,7 +3,7 @@
 enum class Error
 {
 	NoError,
-	CorruptedArchive, 
+	CorruptedArchive,
 	CorruptedOutputStream
 };
 
@@ -19,48 +19,48 @@ public:
 	Error operator()(ArgsT... args);
 
 private:
-    static constexpr char Separator = ' ';
+	static constexpr char Separator = ' ';
 	std::ostream& out_;
 
 	template <class... ArgsT>
 	Error process(ArgsT... args);
-    
-    template <class T, class... ArgsT>
+
+	template <class T, class... ArgsT>
 	Error argsSerialize(T head, ArgsT... args);
 
 	Error argsSerialize();
-    
-	Error toStream(bool val);
-	Error toStream(uint64_t val);
+
+	void toStream(bool val);
+	void toStream(uint64_t val);
 };
 
 template <class T>
 Error Serializer::save(T& object)
 {
-    return object.serialize(*this);
+	return object.serialize(*this);
 }
 
 template <class... ArgsT>
 Error Serializer::operator()(ArgsT... args)
 {
-    return process(args...);
+	return process(args...);
 }
 
 template <class... ArgsT>
 Error Serializer::process(ArgsT... args)
 {
-    // В начале записываем количество полей структуры, подлежащих сериализации,
-    // в поток (нужно, для проверки возможности десериализации в дальнейшем)
+	// В начале записываем количество полей структуры, подлежащих сериализации,
+	// в поток (нужно, для проверки возможности десериализации в дальнейшем)
 	int argsCount = sizeof...(args);
-	out_ << std::to_string(argsCount) + ":" + Separator;
+	out_ << argsCount << Separator;
 	return argsSerialize(args...);
 }
 
 template <class T, class... ArgsT>
 Error Serializer::argsSerialize(T head, ArgsT... args)
 {
-	Error err = toStream(head);
-	return (err != Error::NoError ? err : argsSerialize(args...));
+	toStream(head);
+	return argsSerialize(args...);
 }
 
 
@@ -77,41 +77,40 @@ public:
 
 private:
 	std::istream& in_;
-    
+
 	template <class... ArgsT>
 	Error process(ArgsT&... args);
-    
-    template <class T, class... ArgsT>
+
+	template <class T, class... ArgsT>
 	Error argsDeserialize(T& head, ArgsT&... args);
 	Error argsDeserialize();
-    
+
 	Error toValue(bool& value);
 	Error toValue(uint64_t& value);
-    
-	int argsCount(const std::string& s);
 };
 
 template <class T>
 Error Deserializer::load(T& object)
 {
-    return object.serialize(*this);
+	return object.serialize(*this);
 }
 
 template <class... ArgsT>
 Error Deserializer::operator()(ArgsT&... args)
 {
-    return process(args...);
+	return process(args...);
 }
 
 template <class... ArgsT>
 Error Deserializer::process(ArgsT&... args)
 {
-	std::string s;
-	in_ >> s;
-    // Сначала считываем количество полей в сериализованной структуре
-    // Если оно совпадает с числом полей в данной структуре, пытаемся выполнить
-    // сериализации, иначе выполнение сериализации невозможно
-	if (argsCount(s) != sizeof...(args)) 
+	// Сначала считываем количество полей в сериализованной структуре
+	// Если оно совпадает с числом полей в данной структуре, пытаемся выполнить
+	// сериализации, иначе выполнение сериализации невозможно
+	size_t argsCount;
+	in_ >> argsCount;
+
+	if (argsCount != sizeof...(args))
 		return Error::CorruptedArchive;
 	return argsDeserialize(args...);
 }
