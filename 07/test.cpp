@@ -56,13 +56,13 @@ void test_10(void)
 {
 	TEST_EXCEPTION(format("{}"), std::exception);
 	try
-    {
+	{
 		format("{}");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -70,13 +70,13 @@ void test_11(void)
 {
 	TEST_EXCEPTION(format("{"), std::exception);
 	try
-    {
+	{
 		format("{");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing close bracket");
+			"Invalid format string: missing close bracket");
 	}
 }
 
@@ -84,13 +84,13 @@ void test_12(void)
 {
 	TEST_EXCEPTION(format("}"), std::exception);
 	try
-    {
+	{
 		format("}");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing open bracket");
+			"Invalid format string: missing open bracket");
 	}
 }
 
@@ -98,34 +98,34 @@ void test_13(void)
 {
 	TEST_EXCEPTION(format("{1}", 3), std::exception);
 	try
-    {
+	{
 		format("{1}", 3);
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Extra arguments provided to format");
+			"Extra arguments provided to format");
 	}
 }
 
 void test_14(void)
 {
 	auto text = format("{0}, {10}!",
-        std::string("0"), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-	TEST_CHECK(format(text)=="0, 10!");
+		std::string("0"), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+	TEST_CHECK(format(text) == "0, 10!");
 }
 
 void test_15(void)
 {
 	TEST_EXCEPTION(format("{-1}"), std::exception);
 	try
-    {
+	{
 		format("{-1}");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -133,13 +133,13 @@ void test_16(void)
 {
 	TEST_EXCEPTION(format("{1.3}"), std::exception);
 	try
-    {
+	{
 		format("{1.3}");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -147,13 +147,13 @@ void test_17(void)
 {
 	TEST_EXCEPTION(format("{1f3}"), std::exception);
 	try
-    {
+	{
 		format("{1f3}");
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -161,13 +161,13 @@ void test_18(void)
 {
 	TEST_EXCEPTION(format("{0}+{1 = {2}", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{0}+{1 = {2}", 1, true, 2.f);
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -175,13 +175,13 @@ void test_19(void)
 {
 	TEST_EXCEPTION(format("{0}+{1} = {2", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{0}+{1} = {2", 1, true, 2.f);
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing close bracket");
+			"Invalid format string: missing close bracket");
 	}
 }
 
@@ -189,13 +189,13 @@ void test_20(void)
 {
 	TEST_EXCEPTION(format("{0}+{1} = 2}", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{0}+{1} = 2}", 1, true, 2.f);
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing open bracket");
+			"Invalid format string: missing open bracket");
 	}
 }
 
@@ -203,12 +203,12 @@ void test_21(void)
 {
 	TEST_EXCEPTION(format("{0}+{1 = 2}", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{0}+{1 = 2}", 1, true, 2.f);
 	}
-    catch (std::exception& e) {
+	catch (std::exception& e) {
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: incorrect index");
+			"Invalid format string: incorrect index");
 	}
 }
 
@@ -216,13 +216,13 @@ void test_22(void)
 {
 	TEST_EXCEPTION(format("{{0}+{1} = {2}", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{{0}+{1} = {2}", 1, true, 2.f);
 	}
-    catch (std::exception& e)
-    {
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing close bracket");
+			"Invalid format string: missing close bracket");
 	}
 }
 
@@ -230,39 +230,39 @@ void test_23(void)
 {
 	TEST_EXCEPTION(format("{0}}+{1} = {2}", 1, true, 2.f), std::exception);
 	try
-    {
+	{
 		format("{0}}+{1} = {2}", 1, true, 2.f);
-	} 
-    catch (std::exception& e)
-    {
+	}
+	catch (std::exception& e)
+	{
 		TEST_CHECK(std::string(e.what()) ==
-            "Invalid format string: missing open bracket");
+			"Invalid format string: missing open bracket");
 	}
 }
 
 TEST_LIST = {
-    { "test_1", test_1 },
-    { "test_2", test_2 },
-    { "test_3", test_3 },
-    { "test_4", test_4 },
-    { "test_5", test_5 },
-    { "test_6", test_6 },
-    { "test_7", test_7 },
-    { "test_8", test_8 },
-    { "test_9", test_9 },
-    { "test_10", test_10 },
-    { "test_11", test_11 },
-    { "test_12", test_12 },
-    { "test_13", test_13 },
-    { "test_14", test_14 },
-    { "test_15", test_15 },
-    { "test_16", test_16 },
-    { "test_17", test_17 },
-    { "test_18", test_18 },
-    { "test_19", test_19 },
-    { "test_20", test_20 },
-    { "test_21", test_21 },
-    { "test_22", test_22 },
-    { "test_23", test_23 },
-    { NULL, NULL }
+	{ "test_1", test_1 },
+	{ "test_2", test_2 },
+	{ "test_3", test_3 },
+	{ "test_4", test_4 },
+	{ "test_5", test_5 },
+	{ "test_6", test_6 },
+	{ "test_7", test_7 },
+	{ "test_8", test_8 },
+	{ "test_9", test_9 },
+	{ "test_10", test_10 },
+	{ "test_11", test_11 },
+	{ "test_12", test_12 },
+	{ "test_13", test_13 },
+	{ "test_14", test_14 },
+	{ "test_15", test_15 },
+	{ "test_16", test_16 },
+	{ "test_17", test_17 },
+	{ "test_18", test_18 },
+	{ "test_19", test_19 },
+	{ "test_20", test_20 },
+	{ "test_21", test_21 },
+	{ "test_22", test_22 },
+	{ "test_23", test_23 },
+	{ NULL, NULL }
 };
