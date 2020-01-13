@@ -55,17 +55,6 @@ char* LinearAllocator::alloc(size_t size)
 // Позволяет использовать память аллокатора снова
 void LinearAllocator::reset()
 {
-    // Очищаем память
-    std::free(buffer_);
-
-    // Выделяем память заново
-    buffer_ = static_cast<char*>(malloc(size_));
-    // Если malloc вернул nullptr - malloc не смог выделить память
-    if (buffer_ == nullptr)
-    {
-        std::runtime_error("Failed to allocate memory");
-    }
-
     // Обнуляем смещение
     offset_ = 0;
 }
