@@ -8,14 +8,16 @@ public:
 	using value_type = T;
 	using size_type = size_t;
 	using difference_type = ptrdiff_t;
-	using reference = T & ;
+	using reference = T&;
 	using const_reference = const T&;
-	using pointer = T * ;
+	using pointer = T*;
 	using const_pointer = const T*;
 
 	T* allocate(size_t count)
 	{
-		T* ptr = new T[count];
+		T* ptr = static_cast<T*>(malloc(get_size(count)));
+		if (ptr == nullptr)
+			throw std::bad_alloc();
 		return ptr;
 	}
 
@@ -25,12 +27,15 @@ public:
 		new((void*)p) U(std::forward<Args>(args)...);
 	}
 
+	template< class U >
+	void destroy(U* p)
+	{
+		p->~U();
+	}
+
 	void deallocate(T* ptr, size_t count)
 	{
-		if (std::is_destructible<T>::value)
-			delete[] ptr;
-		else
-			::operator delete(ptr, get_size(count));
+		::operator delete(ptr, get_size(count));
 	}
 
 	size_t max_size() const noexcept

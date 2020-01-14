@@ -5,7 +5,6 @@
 #include <new>
 #include "allocator.h"
 #include "iterator.h"
-
 template <class T, class Alloc = Allocator<T>>
 class Vector
 {
@@ -104,6 +103,7 @@ public:
 		if (this == &other)
 			return *this;
 
+		destroy(begin_, last_);
 		alloc_.deallocate(begin_(), capacity_);
 
 		begin_ = other.begin_;
@@ -137,6 +137,7 @@ public:
 
 	~Vector()
 	{
+		destroy(begin_, last_);
 		alloc_.deallocate(begin_(), capacity_);
 	}
 
@@ -167,7 +168,7 @@ public:
 			size_t newSize = calculate_expansion_size(size_ + 1);
 			reserve(newSize);
 		}
-		*(end_()) = value;
+		alloc_.construct(end_(), value);
 		size_++;
 		end_++;
 	}
@@ -179,7 +180,7 @@ public:
 			size_t newSize = calculate_expansion_size(size_ + 1);
 			reserve(newSize);
 		}
-		*(end_()) = std::move(value);
+		alloc_.construct(end_(), std::move(value));
 		size_++;
 		end_++;
 	}
@@ -268,10 +269,11 @@ public:
 			T* pointer = newVector;
 			for (iterator it = begin_; it != end_; it++)
 			{
-				*pointer = *it;
+				alloc_.construct(pointer, *it);
 				pointer++;
 			}
 
+			destroy(begin_, last_);
 			alloc_.deallocate(begin_(), capacity_);
 
 			begin_() = newVector;
@@ -287,16 +289,14 @@ private:
 	iterator end_; // итератор, указывающий на первый, после последнего эелемента
 	iterator last_; // итератор, указывающий на первый, после конца зарезервированной пам¤ти
 	size_t size_; // размер вектора
-	size_t capacity_; // размер зарезервированной пам¤ти
+	size_t capacity_; // размер зарезервированной памяти
 
 	void destroy(const iterator& first, const iterator& last)
 	{
 		if (std::is_destructible<T>::value)
 		{
 			for (iterator it = first; it != last; it++)
-			{
-				it()->~T();
-			}
+				alloc_.destroy(it());
 		}
 	}
 
